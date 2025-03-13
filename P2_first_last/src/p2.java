@@ -22,10 +22,16 @@ public class p2 {
 			File file = new File(filename); 
 			Scanner scanner = new Scanner(file);
 			
+			
 			int numRows = scanner.nextInt(); 
 			int numCols = scanner.nextInt(); 
 			int numRooms = scanner.nextInt();
-			int rowIndex = 0; 
+			
+			Tile[][][] tiles = new Tile[numRows][numCols][numRooms];
+			
+			int rowIndex = 0;
+			int colsIndex = 0; 
+			int roomsIndex = 0; 
 			
 			//process the map 
 			while(scanner.hasNextLine()) {
@@ -36,16 +42,16 @@ public class p2 {
 				if(row.length() > 0) 
 					for(int i = 0; i < numCols && i < row.length(); i++) {
 						char el = row.charAt(i); 
-						rowIndex = i;
 						Tile obj = new Tile(rowIndex, i, el); 
 						
+						
 						if(obj.getType() == 'W') {
-							System.out.println();
+							System.out.println("(" + rowIndex + "," + i + ")");
 						}
 						
 					}
+					rowIndex++;
 				}
-				
 			
 		} catch (FileNotFoundException e) {
 			//handle exception
