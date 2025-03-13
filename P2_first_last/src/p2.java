@@ -25,7 +25,6 @@ public class p2 {
 			int numRows = scanner.nextInt(); 
 			int numCols = scanner.nextInt(); 
 			int numRooms = scanner.nextInt();
-			
 			int rowIndex = 0; 
 			
 			//process the map 
@@ -37,7 +36,12 @@ public class p2 {
 				if(row.length() > 0) 
 					for(int i = 0; i < numCols && i < row.length(); i++) {
 						char el = row.charAt(i); 
+						rowIndex = i;
 						Tile obj = new Tile(rowIndex, i, el); 
+						
+						if(obj.getType() == 'W') {
+							System.out.println();
+						}
 						
 					}
 				}
