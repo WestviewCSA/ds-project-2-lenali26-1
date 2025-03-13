@@ -1,0 +1,12 @@
+
+Design Plan - P2
+Due: 3/12/25 11:59 
+
+After reading the specs, start populating a list of 
+things you think you might have to do to finish 
+this project.
+
+1) read the specs - understand the problem 
+2) understand map-based input files
+3) enqueue the starting position of the Wolverine 
+4) dequeue the next location 
