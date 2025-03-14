@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 public class p2 {
 	public static void main(String[] args) {
@@ -69,6 +71,28 @@ public class p2 {
 		}catch (FileNotFoundException e){
 			System.out.println(e);
 		}
+		
+	}
+
+	
+	public void shortestPath(Tile[][][] tiles, int wRow, int wCol, int wRoom){
+		
+		int numRows = tiles.length;
+        int numCols = tiles[0].length;
+        int numRooms = tiles[0][0].length;
+		
+		Queue<String> myQueue = new LinkedList<>();
+		
+		 boolean[][][] visited = new boolean[numRows][numCols][numRooms];
+	        Queue<Tile> queue = new LinkedList<>();
+	        
+	        queue.add(tiles[wRow][wCol][wRoom]);
+	        visited[wRow][wCol][wRoom] = true;
+	        
+	        while (!queue.isEmpty()) {
+	           
+	           
+	        }
 		
 	}
 	
