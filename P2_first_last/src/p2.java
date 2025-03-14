@@ -45,16 +45,20 @@ public class p2 {
 					//check if out of bounds for the column
 					for(colIndex = 0; colIndex < numCols && colIndex < row.length(); colIndex++) {
 						
-						//setting the index of the character to the position of the column 
-						char el = row.charAt(colIndex);
-						//setting a new tile object that implements in the index and position and the character
-						Tile obj = new Tile(rowIndex, colIndex, el);
-						//setting a new tile as it iterates
-						tiles[rowIndex][colIndex][roomIndex] = new Tile(rowIndex, colIndex, el);
-						//printing out the values
-						System.out.println("Tile at (" + tiles[rowIndex][colIndex][roomIndex].getRow()
-								+ ", " + tiles[rowIndex][colIndex][roomIndex].getCol() + ", "
-								+ tiles[rowIndex][colIndex][roomIndex].getType() + ")");
+						for(roomIndex = 0; roomIndex < numRooms; roomIndex++) {
+							
+							//setting the index of the character to the position of the column 
+							char el = row.charAt(colIndex);
+							//setting a new tile object that implements in the index and position and the character
+							Tile obj = new Tile(rowIndex, colIndex, el);
+							//setting a new tile as it iterates
+							tiles[rowIndex][colIndex][roomIndex] = new Tile(rowIndex, colIndex, el);
+							//printing out the values
+							System.out.println("Tile at (" + tiles[rowIndex][colIndex][roomIndex].getRow()
+									+ ", " + tiles[rowIndex][colIndex][roomIndex].getCol() + ", "
+									+ tiles[rowIndex][colIndex][roomIndex].getType() + ")");
+							
+						}
 						
 					}
 					
@@ -67,6 +71,7 @@ public class p2 {
 		}
 		
 	}
+	
 	 
 	
 }
