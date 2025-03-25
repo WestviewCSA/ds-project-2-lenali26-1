@@ -97,6 +97,38 @@ public class PathFinder {
         }
         return false;
     }
+    
+    
+    //using recursion to markPath
+    public static boolean markPath(String[][] map, int startX, int startY, int endX, int endY) {
+        //base case
+        if (startX == endX && startY == endY) {
+            return true;
+        }
+        
+        for (int i = 0; i < dRow.length; i++) {
+            newRow = startX + dRow[i];
+            newCol = startY + dCol[i];
+            //first they r moving up, then down, then left, then right
+            //that's why the value is -1, 1, 0, 0 for row
+            //and 0, 0, -1, 1 for col
+            
+            if (isValidMove(map, newRow, newCol, new boolean[map.length][map[0].length])) {
+                // Mark the valid path
+                map[newRow][newCol] = "+"; 
+                
+                //Recursion here! do the same thing until it find the path
+                if (markPath(map, newRow, newCol, endX, endY)) {
+                    return true; 
+                }
+                //Undo if it do the wrong path ;(
+                map[newRow][newCol] = "."; 
+            }
+        }
+        return false;
+    }
+        
+
 
 
 }
