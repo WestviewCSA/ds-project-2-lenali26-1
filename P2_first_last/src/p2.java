@@ -11,45 +11,133 @@ public class p2 {
 	private int startX, startY, endX, endY;
 	private String[][] map;
 	
-
+	//initiating the parameters for the class
     public p2(String[][] map, int row, int col) {
         this.row = row;
         this.col = col; 
         this.map = map; 
     }
-    
+    //creating nest for loops in order to iterate through every value
 	public void findLocation() {
-		for (int r = 0; r < row; r++) {
-			for (int c = 0; c < col; c++) {
-				if (map[r][c] == "W") {
-					startX = r;
-	    			startY = c;
-	    		} else if (map[r][c] == "$") {
-	    			endX = r;
-	    			endY = c;
+		for (int row1 = 0; row1 < row; row1++) { //first iterate through the rows
+			for (int col1 = 0; col1 < col; col1++) { //next iterate through the cols
+				if (map[row1][col1] == "W") { //setting the starting position
+					startX = row1;
+	    			startY = col1;
+	    		} else if (map[row1][col1] == "$") { //sending the ending position
+	    			endX = row1;
+	    			endY = col1;
 	            }
-	        }
+	         }
 	      }
-
-	 }
+	}
+	/*
+	 * creating enhanced for loops to iterate through each value in the arrays 
+	 * in order to create the new map
+	 */
 	public void printMap() {
 		for(String[] newMap : map) {
-			System.out.println(newMap);
+			for(String maps : newMap) {
+				System.out.println(newMap);
+			}
+			System.out.println();
 		}
 	}
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//System.out.println("p2");
+		if(args.length < 2) {
+			System.out.println("Missing required arguments! Use Help for usage information!");
+			System.exit(-1);
+		}
 		
-		readMap("src/TEST01"); //reads the map
-//		readMap("src/TEST02");
-//		readMap("src/TEST03");
-//		readMap("src/TEST04");
-		//readMap("src/TEST05");
+		//initializing the values 
+		//boolean arguments have an initial value of false! 
+		boolean useStack = false;
+		boolean useQueue = false; 
+		boolean useOpt = false; 
+		boolean printTime = false; 
+		boolean inCoordinate = false; 
+		boolean outCoordinate = false; 
+		
+		//initializing the filename(s)
+		String filename = args[args.length - 1];
+		
+		//iterating through the list values
+		for(int i = 0; i < args.length - 1; i++) {
+			String arg = args[i];
+			switch(arg) {
+			//created the test cases for all of the values
+			case "Stack":
+				useStack = true; 
+				break;
+			case "Queue":
+				useQueue = true; 
+				break; 
+			case "Opt":
+				useOpt = true; 
+				break;
+			case "Time":
+				printTime = true; 
+				break;
+			case "Incoordinate":
+				inCoordinate = true; 
+				break;
+			case "Outcoordinate":
+				outCoordinate = true; 
+				break;
+			case "Help":
+				System.out.println("Usage: java p2 [--Stack | --Queue | --Opt] [--Time] [--Incoordinate] [--Outcoordinate] filename");
+				System.exit(0);
+				break;
+			default: 
+				System.out.println("Unkown switch: " + arg);
+				System.exit(-1);
+			}
+		}
+		//if they are all used or all not used
+		if((useStack && useQueue && useOpt) || (!useStack && !useQueue && !useOpt)) {
+			System.out.println("Error: Must include exactly one of --Stack or --Queue or --Opt.");
+			System.exit(-1);
+		}
+		
+		String[][] map = null; 
+		if(inCoordinate) {
+			//need to implement code to read the coordinates
+		} else {
+			map = readMap(filename);
+		} 
+		//creating the mazeRunner object to iterate through the map
+		p2 mazeRunner = new p2(map, map.length, map[0].length); 
+		mazeRunner.findLocation(); 		
+		
+		long startTime = System.nanoTime(); //starting the time
+		boolean found = false; //initializing a boolean found value to determine whether to use queue or stack
+		
+		if (useQueue) { //if use queue is called, then use queue to solve
+			found = PathFinder.Queue(map,  mazeRunner.startX , mazeRunner.startY, mazeRunner.endX, mazeRunner.endY);
+		}else { //if use queue is not called, use the other option of the stacks
+			found = PathFinder.Stack(map,  mazeRunner.startX , mazeRunner.startY, mazeRunner.endX, mazeRunner.endY);
+		}
+		
+		long endTime = System.nanoTime(); //ending the time
+		
+		//if a path is not found, that means the store is closed! 
+		if (!found) {
+			System.out.println("Sorry! The Wolverine store is closed for today!");
+		} else if (useStack) {
+			mazeRunner.printMap(); 
+		}
+		
+		//printing the time!
+		if (printTime) {
+			double duration = (endTime - startTime) / 1e9; //dividing by 1e9 to change nano-seconds to seconds
+			System.out.printf("Total Runtime: %.6f seconds", duration);
+		}
+		
+
 	}
 
-	public static void readMap(String filename) {
+	public static String[][] readMap(String filename) {
 		
 		try {
 			File file = new File(filename); //implement the scanner
@@ -125,6 +213,7 @@ public class p2 {
 	    } catch(FileNotFoundException e) {
 	    	System.out.println("File not found :(");
 	    }
+		return map;
 
 		
 	}
