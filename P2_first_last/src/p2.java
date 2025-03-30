@@ -86,7 +86,7 @@ public class p2 {
 				outCoordinate = true; 
 				break;
 			case "Help":
-				System.out.println("Usage: java p2 [--Stack | --Queue | --Opt] [--Time] [--Incoordinate] [--Outcoordinate] filename");
+				System.out.println("Usage: java p2 [Stack | Queue | Opt] [Time] [Incoordinate] [Outcoordinate] filename");
 				System.exit(0);
 				break;
 			default: 
@@ -96,13 +96,13 @@ public class p2 {
 		}
 		//if they are all used or all not used
 		if((useStack && useQueue && useOpt) || (!useStack && !useQueue && !useOpt)) {
-			System.out.println("Error: Must include exactly one of --Stack or --Queue or --Opt.");
+			System.out.println("Error: Must include exactly one of Stack or Queue or Opt.");
 			System.exit(-1);
 		}
 		
 		String[][] map = null; 
 		if(inCoordinate) {
-			//need to implement code to read the coordinates
+			map = coordinateReader(filename); 
 		} else {
 			map = readMap(filename);
 		} 
@@ -191,9 +191,11 @@ public class p2 {
 	public static String[][] coordinateReader(String filename) {
         String[][] maze = null;
         try {
+        	//initializing the file and scanner objects! 
             File file = new File(filename);
             Scanner scanner = new Scanner(file);
             
+            //initializing values
             int numRows = scanner.nextInt();
             int numCols = scanner.nextInt();
             int numRooms = scanner.nextInt();
@@ -203,66 +205,71 @@ public class p2 {
             
             //grab each line and process each as one row of the map
             maze = new String[numRows][numCols];
-            for (int r = 0; r < numRows; r++) {
-                for (int c = 0; c < numCols; c++) {
-                    maze[r][c] = "."; //fill all position with the dot
+            //creating a nested for loop to iterate through the rows and columns
+            for (int row = 0; row < numRows; row++) {
+                for (int col = 0; col < numCols; col++) {
+                    maze[row][col] = "."; //fill all the position that have a dot
                 }
             }
             
-            int rowIndex = 0;
+            //int rowIndex = 0;
             while(scanner.hasNextLine()) {
                 //grab a row
                 String row = scanner.nextLine();
-                //grab the first character in the row
-                String c = row.substring(0,1);            
-                //grab the x-coordinate by using substring
-                int x = Integer.parseInt(row.substring(2,3));
-                //grab the y-coordinate by using substring
-                int y = Integer.parseInt(row.substring(4,5));
                 
-                //replace position with proper character 
-                maze[x][y] = c;
-                rowIndex++; //update the row
+                if(!row.isEmpty()) {
+                	String[] parts = row.split(" "); 
+                	if (parts.length >= 3) {
+                		String symbol = parts[0];
+                		//grab the x-coordinate by using substring
+                        int x = Integer.parseInt(parts[1]);
+                        //grab the y-coordinate by using substring
+                        int y = Integer.parseInt(parts[2]);
+                        
+                        //replace position with proper character 
+                        maze[x][y] = symbol;
+                	}
+                }
+                //rowIndex++; //update the row
             }
             scanner.close();
-            //change the 2d array to string 
-             for (String[] row : maze) {
-                    System.out.println(String.join("", row));
-                }
+//            
+//            //change the 2d array to string 
+//             for (String[] row : maze) {
+//                    System.out.println(String.join("", row));
+//                }
             
         } catch(FileNotFoundException e) {
-            System.out.println("File not found :(");
+            System.out.println("Sorry! File not found");
         }
 		return maze;
-       
-
     }
 
 
 
 	
-      public void shortestPath(Tile[][][] tiles, int wRow, int wCol, int wRoom){
-		
-		int numRows = tiles.length;
-        int numCols = tiles[0].length;
-        int numRooms = tiles[0][0].length;
-		
-		Queue<String> myQueue = new LinkedList<>();
-		
-		 boolean[][][] visited = new boolean[numRows][numCols][numRooms];
-	        Queue<Tile> queue = new LinkedList<>();
-	        
-	        queue.add(tiles[wRow][wCol][wRoom]);
-	        visited[wRow][wCol][wRoom] = true;
-	        
-	        while (!queue.isEmpty()) {
-	           
-	           
-	        }
-		
-	}
+//      public void shortestPath(Tile[][][] tiles, int wRow, int wCol, int wRoom){
+//		
+//		int numRows = tiles.length;
+//        int numCols = tiles[0].length;
+//        int numRooms = tiles[0][0].length;
+//		
+//		Queue<String> myQueue = new LinkedList<>();
+//		
+//		 boolean[][][] visited = new boolean[numRows][numCols][numRooms];
+//	        Queue<Tile> queue = new LinkedList<>();
+//	        
+//	        queue.add(tiles[wRow][wCol][wRoom]);
+//	        visited[wRow][wCol][wRoom] = true;
+//	        
+//	        while (!queue.isEmpty()) {
+//	           
+//	           
+//	        }
+//		
+//	}
 	
-      }
+}
     
 	
 
