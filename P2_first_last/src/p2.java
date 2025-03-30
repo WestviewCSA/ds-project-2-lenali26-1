@@ -46,7 +46,7 @@ public class p2 {
 	
 	public static void main(String[] args) {
 		if(args.length < 2) {
-			System.out.println("Missing required arguments! Use Help for usage information!");
+			System.out.println("Missing required arguments! Use --Help for usage information!");
 			System.exit(-1);
 		}
 		
@@ -63,26 +63,26 @@ public class p2 {
 			String arg = args[i];
 			switch(arg) {
 			//created the test cases for all of the values
-			case "Stack":
+			case "--Stack":
 				useStack = true; 
 				break;
-			case "Queue":
+			case "--Queue":
 				useQueue = true; 
 				break; 
-			case "Opt":
+			case "--Opt":
 				useOpt = true; 
 				break;
-			case "Time":
+			case "--Time":
 				printTime = true; 
 				break;
-			case "Incoordinate":
+			case "--Incoordinate":
 				inCoordinate = true; 
 				break;
-			case "Outcoordinate":
+			case "--Outcoordinate":
 				outCoordinate = true; 
 				break;
 			case "--Help":
-				System.out.println("Usage: java p2 [Stack | Queue | Opt] [Time] [Incoordinate] [Outcoordinate] filename");
+				System.out.println("Usage: java p2 [--Stack | --Queue | --Opt] [--Time] [--Incoordinate] [--Outcoordinate] filename");
 				System.exit(0);
 				break;
 			default: 

@@ -258,7 +258,7 @@ public class PathFinder {
         }
         return true;
     }
-    
+     
     public static boolean markPath(String[][] map, int startX, int startY, int endX, int endY) {
     	//setting a base case bc using recursion
     	if (startX == endX && startY == endY) {
