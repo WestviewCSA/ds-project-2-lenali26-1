@@ -38,7 +38,7 @@ public class p2 {
 	public void printMap() {
 		for(String[] newMap : map) {
 			for(String maps : newMap) {
-				System.out.println(newMap);
+				System.out.println(maps);
 			}
 			System.out.println();
 		}
@@ -52,12 +52,8 @@ public class p2 {
 		
 		//initializing the values 
 		//boolean arguments have an initial value of false! 
-		boolean useStack = false;
-		boolean useQueue = false; 
-		boolean useOpt = false; 
-		boolean printTime = false; 
-		boolean inCoordinate = false; 
-		boolean outCoordinate = false; 
+		boolean useStack = false, useQueue = false, useOpt = false, 
+				printTime = false, inCoordinate = false, outCoordinate = false; 
 		
 		//initializing the filename(s)
 		String filename = args[args.length - 1];
@@ -85,7 +81,7 @@ public class p2 {
 			case "Outcoordinate":
 				outCoordinate = true; 
 				break;
-			case "Help":
+			case "--Help":
 				System.out.println("Usage: java p2 [Stack | Queue | Opt] [Time] [Incoordinate] [Outcoordinate] filename");
 				System.exit(0);
 				break;
@@ -201,7 +197,7 @@ public class p2 {
             int numRooms = scanner.nextInt();
             scanner.nextLine();
             
-            System.out.println(numRows + " " + numCols + " " + numRooms);
+            //System.out.println(numRows + " " + numCols + " " + numRooms);
             
             //grab each line and process each as one row of the map
             maze = new String[numRows][numCols];

@@ -23,7 +23,7 @@ public class PathFinder {
         }
         //implementing push 
         //push means that something is added to the beginning
-        stack.push(new int[] {startX, startY}); 
+        stack.push(new int[]{startX, startY}); 
         visited[startX][startY] = true; 
         //mark that the original starting point has already been visited
         
@@ -52,7 +52,7 @@ public class PathFinder {
         		if (isValidMove(map, newRow, newCol, visited)) {
         			
         			//uses the push command to add to the stack
-        			stack.push(new int[] {newRow, newCol});
+        			stack.push(new int[]{newRow, newCol});
         			//mark that the position is already visited
         			//mark position in order to make sure that it is not revisited
         			visited[newRow][newCol] = true; 
@@ -64,6 +64,7 @@ public class PathFinder {
         		}
         	}	
         }
+        
         if (!found) {
         	return false; // if a path is not found then false is returned! 
         }
@@ -96,6 +97,7 @@ public class PathFinder {
     	int[][][] parentFunction = new int[map.length][map[0].length][2];
     	//add the parent function in order to have multiple paths
     	//this is used to retrace the shortest path! 
+    	
     	for (int[][] row : parentFunction) {
     		for (int[] row1: row) {
     			Arrays.fill(row1, -1);
@@ -105,7 +107,7 @@ public class PathFinder {
     	//implementing push 
         //push means that something is added to the beginning
     	//push is the same as add! 
-        queue.add(new int[] {startX, startY}); 
+        queue.add(new int[]{startX, startY}); 
         visited[startX][startY] = true; 
         //mark that the original starting point has already been visited
         
@@ -132,21 +134,20 @@ public class PathFinder {
         		int newRow = row + dRow[i]; 
         		int newCol = col + dCol[i];
         		
-        		//check if the new position is on the map! 
-        		if (isValidMove(map, newRow, newCol, visited)) {
-        			
-        			//uses the push command to add to the stack
-        			queue.add(new int[] {newRow, newCol});
-        			//mark that the position is already visited
-        			//mark position in order to make sure that it is not revisited
-        			visited[newRow][newCol] = true; 
-        			
-        			//changing the value of the parent function to continue iterating
-        			parentFunction[newRow][newCol][0] = row; 
-        			parentFunction[newRow][newCol][1] = row; 
-        			
-        		}
-        	}	
+        		 //check is the new row and new col is able to move
+                if (newRow < 0 || newRow >= map.length || newCol < 0 || newCol >= map[0].length) { 
+                	if (visited[newRow][newCol] || map[newRow][newCol].equals("@")) {
+                	//add to stack
+                	queue.add(new int[]{newRow, newCol});
+                    //mark that it is already visited, so we will not revisit it
+                    visited[newRow][newCol] = true;
+                    
+                    parentFunction[newRow][newCol][0] = row;
+                    parentFunction[newRow][newCol][1] = col;
+                	}
+                }
+            }
+	
         }
         if (!found) {
         	return false; // if a path is not found then false is returned! 
@@ -189,7 +190,7 @@ public class PathFinder {
     	//implementing push 
         //push means that something is added to the beginning
     	//push is the same as add! 
-        queue.add(new int[] {startX, startY}); 
+        queue.add(new int[]{startX, startY}); 
         visited[startX][startY] = true; 
         //mark that the original starting point has already been visited
         
@@ -242,6 +243,7 @@ public class PathFinder {
         int row = endX, col = endY; 
         //if it doesn't start from the beginning
         while (!(row == startX && col == startY)) {
+        	path.add(new int[] {row, col});
         	//setting the previous function to the old function
         	int prevRow = parentFunction[row][col][0]; 
         	int prevCol = parentFunction[row][col][1]; 
@@ -255,6 +257,34 @@ public class PathFinder {
             System.out.println("+ " + cell[0] + " " + cell[1] + " 0");
         }
         return true;
+    }
+    
+    public static boolean markPath(String[][] map, int startX, int startY, int endX, int endY) {
+    	//setting a base case bc using recursion
+    	if (startX == endX && startY == endY) {
+    		return true; 
+    	}
+    	for(int i = 0; i < dRow.length; i++) { //uses 4 because you need to check all the directions: N/E/S/W
+    		
+    		//set a new row and new column if the four directions are being checked 
+    		newRow = startX + dRow[i]; 
+    		newCol = startY + dCol[i];
+    		
+    		//check if the new position is on the map! 
+    		if (isValidMove(map, newRow, newCol, new boolean[map.length][map[0].length])) {
+    			
+    			//mark the valid paths with "+" 
+    			map[newRow][newCol] = "+"; 
+    			
+    			//use recursion to find the paths 
+    			if (markPath(map, newRow, newCol, endX, endY)) {
+    				return true; 
+    			}
+    			//if it is the wrong path, then go back and change the "+" back to "." 
+    			map[newRow][newCol] = "."; 	
+    		}
+    	}
+    	return false; 
     }
     
     public static boolean isValidMove(String[][] map, int row, int col, boolean[][] visited) {
