@@ -36,13 +36,18 @@ public class p2 {
 	 * in order to create the new map
 	 */
 	public void printMap() {
-		for(String[] newMap : map) {
-			for(String maps : newMap) {
-				System.out.println(maps);
+		for(String[] row : map) {
+			for(String cell : row) {
+				System.out.println(cell);
 			}
 			System.out.println();
 		}
 	}
+	
+	public int getStartX() { return startX; }
+	public int getStartY() { return startY; }
+	public int getEndX() { return endX; }
+	public int getEndY() { return endY; }
 	
 	public static void main(String[] args) {
 		if(args.length < 2) {
@@ -96,11 +101,10 @@ public class p2 {
 			System.exit(-1);
 		}
 		
-		String[][] map = null; 
-		if(inCoordinate) {
-			map = coordinateReader(filename); 
-		} else {
-			map = readMap(filename);
+		String[][] map = inCoordinate ? coordinateReader(filename) : readMap(filename); 
+		if(map == null) {
+			System.out.println("Error: Failed to load map.");
+			System.exit(-1);
 		} 
 		
 		//creating the mazeRunner object to iterate through the map
@@ -110,19 +114,27 @@ public class p2 {
 		long startTime = System.nanoTime(); //starting the time
 		boolean found = false; //initializing a boolean found value to determine whether to use queue or stack
 		
-		if (useQueue) { //if use queue is called, then use queue to solve
-			found = PathFinder.Queue(map,  mazeRunner.startX , mazeRunner.startY, mazeRunner.endX, mazeRunner.endY);
-		}else { //if use queue is not called, use the other option of the stacks
-			found = PathFinder.Stack(map,  mazeRunner.startX , mazeRunner.startY, mazeRunner.endX, mazeRunner.endY);
-		}
+//		if (useQueue) { //if use queue is called, then use queue to solve
+//			found = PathFinder.Queue(map,  mazeRunner.startX , mazeRunner.startY, mazeRunner.endX, mazeRunner.endY);
+//		}else { //if use queue is not called, use the other option of the stacks
+//			found = PathFinder.Stack(map,  mazeRunner.startX , mazeRunner.startY, mazeRunner.endX, mazeRunner.endY);
+//		}
+		if (useOpt) {
+	        found = PathFinder.Opt(map, mazeRunner.getStartX(), mazeRunner.getStartY(), mazeRunner.getEndX(), mazeRunner.getEndY(), outCoordinate);
+	    } else if (useQueue) {
+	        found = PathFinder.Queue(map, mazeRunner.getStartX(), mazeRunner.getStartY(), mazeRunner.getEndX(), mazeRunner.getEndY(), outCoordinate);
+	    } else {
+	        found = PathFinder.Stack(map, mazeRunner.getStartX(), mazeRunner.getStartY(), mazeRunner.getEndX(), mazeRunner.getEndY(), outCoordinate);
+	    }
 		
 		long endTime = System.nanoTime(); //ending the time
 		
 		//if a path is not found, that means the store is closed! 
 		if (!found) {
-			System.out.println("Sorry! The Wolverine store is closed for today!");
-		} else if (useStack) {
-			mazeRunner.printMap(); 
+		    System.out.println("Sorry! The Wolverine store is closed for today!");
+		} else if (!outCoordinate) {
+		    // Only print the map if not using --Outcoordinate
+		    mazeRunner.printMap();
 		}
 		
 		//printing the time!
@@ -144,7 +156,8 @@ public class p2 {
 			//initiating values with the scanner obj
 			int numRows  = scanner.nextInt();
 			int numCols  = scanner.nextInt();
-			int numRooms = scanner.nextInt();
+			//int numRooms = scanner.nextInt();
+			scanner.nextInt(); 
 			scanner.nextLine(); 
 			
 			map = new String[numRows][numCols]; //initializing the map
@@ -158,23 +171,30 @@ public class p2 {
 //			//creating a 3-D array with the tiles
 //			Tile[][][] tiles = new Tile[numRows][numCols][numRooms];
 //			
-			//grabbing each line and process each line as in one row of the map
-			int rowProcessed = 0;	
-			while(scanner.hasNextLine() && rowProcessed < numRows) {
-				//grab a row
-				String row = scanner.nextLine();
-				row = row.substring(0, numCols);
-				
-				//System.out.println(row);
-				
-				for(int col = 0; col < numCols; col++) {
-					//changing the values of the map according to the row it's iterating in 
-					map[rowProcessed][col] = String.valueOf(row.charAt(col)); 
-	        	}
-	            rowProcessed++;
-	                
+//			//grabbing each line and process each line as in one row of the map
+//			int rowProcessed = 0;	
+//			while(scanner.hasNextLine() && rowProcessed < numRows) {
+//				//grab a row
+//				String row = scanner.nextLine();
+//				row = row.substring(0, numCols);
+//				
+//				//System.out.println(row);
+//				
+//				for(int col = 0; col < numCols; col++) {
+//					//changing the values of the map according to the row it's iterating in 
+//					map[rowProcessed][col] = String.valueOf(row.charAt(col)); 
+//	        	}
+//	            rowProcessed++;
+//	                
+//			}
+//			scanner.close();   
+			for (int row = 0; row < numRows; row++) {
+				String rowLine = scanner.nextLine().trim();
+				for (int col = 0; col < numCols && col < rowLine.length(); col++) {
+					map[row][col] = String.valueOf(rowLine.charAt(col));
+				}
 			}
-			scanner.close();   
+			scanner.close();
 		
 		//creating the value if the file is not found
 	    } catch(FileNotFoundException e) {
@@ -194,7 +214,8 @@ public class p2 {
             //initializing values
             int numRows = scanner.nextInt();
             int numCols = scanner.nextInt();
-            int numRooms = scanner.nextInt();
+            //int numRooms = scanner.nextInt();
+            scanner.nextInt(); 
             scanner.nextLine();
             
             //System.out.println(numRows + " " + numCols + " " + numRooms);
@@ -212,8 +233,9 @@ public class p2 {
             while(scanner.hasNextLine()) {
                 //grab a row
                 String row = scanner.nextLine();
+                String line = scanner.nextLine().trim();
                 
-                if(!row.isEmpty()) {
+                if(!line.isEmpty()) {
                 	String[] parts = row.split(" "); 
                 	if (parts.length >= 3) {
                 		String symbol = parts[0];
@@ -222,8 +244,10 @@ public class p2 {
                         //grab the y-coordinate by using substring
                         int y = Integer.parseInt(parts[2]);
                         
+                        if (x >= 0 && x < numRows && y >= 0 && y < numCols) {
                         //replace position with proper character 
                         maze[x][y] = symbol;
+                        }
                 	}
                 }
                 //rowIndex++; //update the row
