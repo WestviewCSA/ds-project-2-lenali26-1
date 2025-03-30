@@ -106,6 +106,7 @@ public class p2 {
 		} else {
 			map = readMap(filename);
 		} 
+		
 		//creating the mazeRunner object to iterate through the map
 		p2 mazeRunner = new p2(map, map.length, map[0].length); 
 		mazeRunner.findLocation(); 		
@@ -138,6 +139,7 @@ public class p2 {
 	}
 
 	public static String[][] readMap(String filename) {
+		String[][] map = null; //initializing the map! 
 		
 		try {
 			File file = new File(filename); //implement the scanner
@@ -149,76 +151,45 @@ public class p2 {
 			int numRooms = scanner.nextInt();
 			scanner.nextLine(); 
 			
-			System.out.println(numRows + " " + numCols + " " + numRooms);
+			map = new String[numRows][numCols]; //initializing the map
 			
-			//initializing variables
-			int rowIndex = 0;
-			int roomIndex = 0;
-			int colIndex = 0;
+			//System.out.println(numRows + " " + numCols + " " + numRooms);
 			
-			//creating a 3-D array with the tiles
-			Tile[][][] tiles = new Tile[numRows][numCols][numRooms];
-			
-			//process the map
-			
-//			while (scanner.hasNextLine()) {
-//				
-//				//grab a line (one row of the map)
-//				String row = scanner.nextLine();
-//				System.out.println(row);
-//				
-//				
-//				
-//				//check if out of bounds for the row
-//				if (row.length()>0) {
-//					//check if out of bounds for the column
-//					for(colIndex = 0; colIndex < numCols && colIndex < row.length(); colIndex++) {
-//						
-//						for(roomIndex = 0; roomIndex < numRooms; roomIndex++) {
-//							
-//							//setting the index of the character to the position of the column 
-//							char el = row.charAt(colIndex);
-//							//setting a new tile object that implements in the index and position and the character
-//							Tile obj = new Tile(rowIndex, colIndex, el);
-//							//setting a new tile as it iterates
-//							tiles[rowIndex][colIndex][roomIndex] = new Tile(rowIndex, colIndex, el);
-//							//printing out the values
-//							System.out.println("Tile at (" + tiles[rowIndex][colIndex][roomIndex].getRow()
-//									+ ", " + tiles[rowIndex][colIndex][roomIndex].getCol() + ", "
-//									+ tiles[rowIndex][colIndex][roomIndex].getType() + ")");
-//							
-//						}
-//						
-//					}
-//					
-//					rowIndex++; //adding to make the if loop iterate through it
-//				}
-//			}
+//			//initializing variables
+//			int rowIndex = 0;
+//			int roomIndex = 0;
+//			int colIndex = 0;
+//			//creating a 3-D array with the tiles
+//			Tile[][][] tiles = new Tile[numRows][numCols][numRooms];
 //			
-//		}catch (FileNotFoundException e){
-//			System.out.println(e);
-//		}
-	    while(scanner.hasNextLine() && rowIndex < numRows) {
-	    //grab a row
-	    	String row = scanner.nextLine();
-	    	row = row.substring(0, numCols);
-	    	System.out.println(row);
-	        /*for(int i = 0; i < numCols && i < row.length(); i++) {
-	         * 		System.out.println(row.charAt(i));
-	        }*/
-	                rowIndex++;
+			//grabbing each line and process each line as in one row of the map
+			int rowProcessed = 0;	
+			while(scanner.hasNextLine() && rowProcessed < numRows) {
+				//grab a row
+				String row = scanner.nextLine();
+				row = row.substring(0, numCols);
+				
+				//System.out.println(row);
+				
+				for(int col = 0; col < numCols; col++) {
+					//changing the values of the map according to the row it's iterating in 
+					map[rowProcessed][col] = String.valueOf(row.charAt(col)); 
+	        	}
+	            rowProcessed++;
 	                
-	     }
-	    scanner.close();   
-	    } catch(FileNotFoundException e) {
-	    	System.out.println("File not found :(");
-	    }
-		return map;
-
+			}
+			scanner.close();   
 		
+		//creating the value if the file is not found
+	    } catch(FileNotFoundException e) {
+	    	System.out.println("Sorry! File not found");
+	    }
+		return map;	
 	}
-	public static void coordinateReader(String filename) {
-        String[][] maze;
+	
+	
+	public static String[][] coordinateReader(String filename) {
+        String[][] maze = null;
         try {
             File file = new File(filename);
             Scanner scanner = new Scanner(file);
@@ -262,6 +233,8 @@ public class p2 {
         } catch(FileNotFoundException e) {
             System.out.println("File not found :(");
         }
+		return maze;
+       
 
     }
 
