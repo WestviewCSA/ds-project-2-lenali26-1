@@ -10,3 +10,5 @@ this project.
 2) understand map-based input files
 3) enqueue the starting position of the Wolverine 
 4) dequeue the next location 
+5) run through the code using queue, stacks, ects
+6) find the optimal location 
